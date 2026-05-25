@@ -1,1 +1,157 @@
- 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeries par niveaux</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            margin-top: 50px;
+            border-left: 5px solid #333;
+            padding-left: 10px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .caption {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .selector {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Galeries automatiques des quiz</h1>
+
+<div class="selector">
+    <input type="file"
+           id="folderInput"
+           webkitdirectory
+           multiple>
+</div>
+
+<h2>Niveau 1</h2>
+<div class="gallery" id="niveau1"></div>
+
+<h2>Niveau 2</h2>
+<div class="gallery" id="niveau2"></div>
+
+<h2>Niveau 3</h2>
+<div class="gallery" id="niveau3"></div>
+
+<script>
+
+const input = document.getElementById('folderInput');
+
+const galleries = {
+    quizz_niveau1: document.getElementById('niveau1'),
+    quizz_niveau2: document.getElementById('niveau2'),
+    quizz_niveau3: document.getElementById('niveau3')
+};
+
+input.addEventListener('change', (event) => {
+
+    // vider les anciennes galeries
+    Object.values(galleries).forEach(gallery => {
+        gallery.innerHTML = '';
+    });
+
+    const files = Array.from(event.target.files);
+
+    const counters = {
+        quizz_niveau1: 1,
+        quizz_niveau2: 1,
+        quizz_niveau3: 1
+    };
+
+    files.forEach(file => {
+
+        if (!file.type.startsWith('image/')) {
+            return;
+        }
+
+        const path = file.webkitRelativePath;
+
+        let dossier = null;
+
+        if (path.includes('quizz_niveau1/')) {
+            dossier = 'quizz_niveau1';
+        }
+        else if (path.includes('quizz_niveau2/')) {
+            dossier = 'quizz_niveau2';
+        }
+        else if (path.includes('quizz_niveau3/')) {
+            dossier = 'quizz_niveau3';
+        }
+
+        if (!dossier) {
+            return;
+        }
+
+        const numero = counters[dossier];
+
+        const imageURL = URL.createObjectURL(file);
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+            <img src="${imageURL}" alt="Photo ${numero}">
+            <div class="caption">
+                Photo n°${numero}
+            </div>
+        `;
+
+        galleries[dossier].appendChild(card);
+
+        counters[dossier]++;
+    });
+
+});
+
+</script>
+
+</body>
+</html> 
