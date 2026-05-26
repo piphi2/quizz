@@ -1,13 +1,14 @@
 name: Génération automatique images.json
 
 on:
+
   push:
     paths:
       - 'quizz_niveau1/**'
       - 'quizz_niveau2/**'
       - 'quizz_niveau3/**'
 
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
 
