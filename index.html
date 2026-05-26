@@ -62,8 +62,8 @@ h2 {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
     flex-direction: column;
+    z-index: 9999;
 }
 
 .lightbox.active {
@@ -77,7 +77,8 @@ h2 {
     user-select: none;
 }
 
-/* CONTROLS */
+/* BOUTONS */
+
 .controls {
     position: absolute;
     bottom: 30px;
@@ -105,6 +106,17 @@ button {
     color: white;
 }
 
+/* COMPTEUR */
+
+#counter {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
 </style>
 </head>
 
@@ -126,6 +138,8 @@ button {
 
     <button class="back-btn" onclick="goHome()">⬅ Retour</button>
 
+    <div id="counter"></div>
+
     <img id="lightbox-img">
 
     <div class="controls">
@@ -142,16 +156,18 @@ let currentIndex = 0;
 
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
+const counter = document.getElementById('counter');
 
 function openLightbox(list, index) {
     images = list;
     currentIndex = index;
-    showImage();
     lightbox.classList.add('active');
+    showImage();
 }
 
 function showImage() {
     lightboxImg.src = images[currentIndex];
+    counter.textContent = `${currentIndex + 1} / ${images.length}`;
 }
 
 function nextImage() {
@@ -183,8 +199,8 @@ lightbox.addEventListener('touchstart', e => {
 lightbox.addEventListener('touchend', e => {
     let endX = e.changedTouches[0].clientX;
 
-    if (startX - endX > 50) nextImage();      // swipe gauche
-    if (endX - startX > 50) prevImage();      // swipe droite
+    if (startX - endX > 50) nextImage();
+    if (endX - startX > 50) prevImage();
 });
 
 /* CLAVIER */
