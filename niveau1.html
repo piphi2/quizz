@@ -217,9 +217,8 @@ fetch("images1.json")
 
         const src = `quizz_niveau1/${imgName}`;
 
-        card.innerHTML = `<img src="${src}" alt="">`
-        <div class="caption">Photo n°${i + 1}</div>
-            ;
+        card.innerHTML = `<img src="${src}" alt="">
+        <div class="caption">Photo n°${i + 1}</div>`;
 
         card.addEventListener("click", () => open(list, i));
 
