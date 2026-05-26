@@ -44,16 +44,9 @@ h2 {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    display: block;
 }
 
-.caption {
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-}
-
-/* ===== LIGHTBOX ===== */
+/* LIGHTBOX */
 
 .lightbox {
     position: fixed;
@@ -72,18 +65,31 @@ h2 {
 
 .lightbox img {
     max-width: 90%;
-    max-height: 80%;
+    max-height: 75vh;
     border-radius: 10px;
-    user-select: none;
+}
+
+/* ZONE INFOS */
+
+.info {
+    margin-top: 15px;
+    text-align: center;
+    color: white;
+}
+
+/* COMPTEUR */
+
+#counter {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 /* BOUTONS */
 
 .controls {
-    position: absolute;
-    bottom: 30px;
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 button {
@@ -94,27 +100,13 @@ button {
     cursor: pointer;
 }
 
-.nav-btn {
+.nav {
     background: white;
 }
 
-.back-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+.home {
     background: #ff4d4d;
     color: white;
-}
-
-/* COMPTEUR */
-
-#counter {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
 }
 
 </style>
@@ -136,18 +128,23 @@ button {
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
 
-    <button class="back-btn" onclick="goHome()">⬅ Retour</button>
-
-    <div id="counter"></div>
-
     <img id="lightbox-img">
 
-    <div class="controls">
-        <button class="nav-btn" onclick="prevImage()">⬅ Précédent</button>
-        <button class="back-btn" onclick="goHome()">⬅ Retour</button>
-        <button class="nav-btn" onclick="nextImage()">Suivant ➡</button>
+    <div class="info">
+
+        <div id="counter"></div>
+
+        <div class="controls">
+
+            <button class="nav" onclick="prevImage()">⬅ Précédent</button>
+
+            <button class="home" onclick="goHome()">⬅ Retour</button>
+
+            <button class="nav" onclick="nextImage()">Suivant ➡</button>
+
+        </div>
+
     </div>
-    <div id="counter"></div>
 
 </div>
 
@@ -184,14 +181,13 @@ function prevImage() {
 
 function closeLightbox() {
     lightbox.classList.remove('active');
-    lightboxImg.src = '';
 }
 
 function goHome() {
     window.location.href = "index.html";
 }
 
-/* SWIPE MOBILE */
+/* SWIPE */
 let startX = 0;
 
 lightbox.addEventListener('touchstart', e => {
@@ -205,7 +201,7 @@ lightbox.addEventListener('touchend', e => {
     if (endX - startX > 50) prevImage();
 });
 
-/* CLAVIER */
+/* KEYBOARD */
 document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('active')) return;
 
