@@ -1,40 +1,36 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
 
-const dossiers = [
-    'quizz_niveau1',
-    'quizz_niveau2',
-    'quizz_niveau3'
+const folders = [
+  {
+    folder: "quizz_niveau1",
+    output: "images1.json",
+    key: "quizz_niveau1"
+  },
+  {
+    folder: "quizz_niveau2",
+    output: "images2.json",
+    key: "quizz_niveau2"
+  },
+  {
+    folder: "quizz_niveau3",
+    output: "images3.json",
+    key: "quizz_niveau3"
+  }
 ];
 
-const extensions = [
-    '.jpg',
-    '.jpeg',
-    '.png',
-    '.gif',
-    '.webp'
-];
+let result = {};
 
-const resultat = {};
+folders.forEach(cfg => {
 
-dossiers.forEach(dossier => {
+  const files = fs.readdirSync(cfg.folder)
+    .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
+    .sort();
 
-    const fichiers = fs.readdirSync(dossier);
+  result[cfg.key] = files;
 
-    resultat[dossier] = fichiers.filter(fichier => {
+  fs.writeFileSync(cfg.output, JSON.stringify({
+    [cfg.key]: files
+  }, null, 2));
 
-        const extension = path.extname(fichier).toLowerCase();
-
-        return extensions.includes(extension);
-
-    });
-
+  console.log(`✔ Généré ${cfg.output}`);
 });
-
-fs.writeFileSync(
-    'images.json',
-    JSON.stringify(resultat, null, 2),
-    'utf8'
-);
-
-console.log('images.json généré automatiquement');
