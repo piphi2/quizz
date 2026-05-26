@@ -1,85 +1,111 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeries Quiz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galeries Quiz</title>
 
-    <style>
+<style>
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
 
-        h2 {
-            margin-top: 50px;
-            border-left: 5px solid #333;
-            padding-left: 10px;
-        }
+h2 {
+    margin-top: 50px;
+    border-left: 5px solid #333;
+    padding-left: 10px;
+}
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
 
-        .card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            cursor: pointer;
-        }
+.card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
 
-        .card img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            display: block;
-        }
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
 
-        .caption {
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-        }
+.caption {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
 
-        /* ===== LIGHTBOX ===== */
+/* ===== LIGHTBOX ===== */
 
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    flex-direction: column;
+}
 
-        .lightbox img {
-            max-width: 95%;
-            max-height: 95%;
-            cursor: pointer;
-            border-radius: 10px;
-        }
+.lightbox.active {
+    display: flex;
+}
 
-        .lightbox.active {
-            display: flex;
-        }
+.lightbox img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 10px;
+    user-select: none;
+}
 
-    </style>
+/* CONTROLS */
+.controls {
+    position: absolute;
+    bottom: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.nav-btn {
+    background: white;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #ff4d4d;
+    color: white;
+}
+
+</style>
 </head>
 
 <body>
@@ -97,52 +123,111 @@
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
-    <img id="lightbox-img" src="">
+
+    <button class="back-btn" onclick="goHome()">⬅ Retour</button>
+
+    <img id="lightbox-img">
+
+    <div class="controls">
+        <button class="nav-btn" onclick="prevImage()">⬅ Précédent</button>
+        <button class="nav-btn" onclick="nextImage()">Suivant ➡</button>
+    </div>
+
 </div>
 
 <script>
 
+let images = [];
+let currentIndex = 0;
+
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+
+function openLightbox(list, index) {
+    images = list;
+    currentIndex = index;
+    showImage();
+    lightbox.classList.add('active');
+}
+
+function showImage() {
+    lightboxImg.src = images[currentIndex];
+}
+
+function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage();
+}
+
+function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage();
+}
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    lightboxImg.src = '';
+}
+
+function goHome() {
+    window.location.href = "index.html";
+}
+
+/* SWIPE MOBILE */
+let startX = 0;
+
+lightbox.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+});
+
+lightbox.addEventListener('touchend', e => {
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) nextImage();      // swipe gauche
+    if (endX - startX > 50) prevImage();      // swipe droite
+});
+
+/* CLAVIER */
+document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('active')) return;
+
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'Escape') closeLightbox();
+});
+
 fetch('images.json')
-    .then(res => res.json())
-    .then(data => {
+.then(res => res.json())
+.then(data => {
 
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
+    Object.keys(data).forEach(dossier => {
 
-        Object.keys(data).forEach(dossier => {
+        const gallery = document.getElementById(dossier);
 
-            const gallery = document.getElementById(dossier);
+        const list = data[dossier].map(img => `${dossier}/${img}`);
 
-            data[dossier].forEach((image, index) => {
+        data[dossier].forEach((image, index) => {
 
-                const card = document.createElement('div');
-                card.className = 'card';
+            const card = document.createElement('div');
+            card.className = 'card';
 
-                const imgSrc = `${dossier}/${image}`;
+            const imgSrc = `${dossier}/${image}`;
 
-                card.innerHTML = `
-                    <img src="${imgSrc}" alt="Photo ${index + 1}">
-                    <div class="caption">Photo n°${index + 1}</div>
-                `;
+            card.innerHTML = `
+                <img src="${imgSrc}">
+                <div class="caption">Photo n°${index + 1}</div>
+            `;
 
-                // clic sur image → plein écran
-                card.addEventListener('click', () => {
-                    lightboxImg.src = imgSrc;
-                    lightbox.classList.add('active');
-                });
-
-                gallery.appendChild(card);
+            card.addEventListener('click', () => {
+                openLightbox(list, index);
             });
 
-        });
-
-        // clic sur plein écran → retour galerie
-        lightbox.addEventListener('click', () => {
-            lightbox.classList.remove('active');
-            lightboxImg.src = '';
+            gallery.appendChild(card);
         });
 
     });
+
+});
 
 </script>
 
