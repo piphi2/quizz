@@ -210,7 +210,7 @@ fetch("images2.json")
     const list = data.quizz_niveau2.map(img => `quizz_niveau2/${img}`);
     const gallery = document.getElementById("gallery");
 
-    data.quizz_niveau1.forEach((imgName, i) => {
+    data.quizz_niveau2.forEach((imgName, i) => {
 
         const card = document.createElement("div");
         card.className = "card";
