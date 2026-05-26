@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niveau 1</title>
+
+<style>
+
+/* ===== BASE ===== */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+/* ===== GALERIE ===== */
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===== LIGHTBOX ===== */
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 75vh;
+    border-radius: 10px;
+}
+
+/* INFO */
+
+.info {
+    margin-top: 15px;
+    text-align: center;
+    color: white;
+}
+
+#counter {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* BOUTONS */
+
+.controls {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.nav {
+    background: white;
+}
+
+.home {
+    background: #ff4d4d;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Niveau 1</h1>
+
+<div class="gallery" id="gallery"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+
+    <img id="lightbox-img">
+
+    <div class="info">
+
+        <div id="counter"></div>
+
+        <div class="controls">
+            <button class="nav" onclick="prev()">⬅ Précédent</button>
+            <button class="home" onclick="goHome()">Retour</button>
+            <button class="nav" onclick="next()">Suivant ➡</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let images = [];
+let currentIndex = 0;
+
+const lightbox = document.getElementById("lightbox");
+const img = document.getElementById("lightbox-img");
+const counter = document.getElementById("counter");
+
+function open(list, i) {
+    images = list;
+    currentIndex = i;
+    lightbox.classList.add("active");
+    show();
+}
+
+function show() {
+    img.src = images[currentIndex];
+    counter.textContent = `${currentIndex + 1} / ${images.length}`;
+}
+
+function next() {
+    currentIndex = (currentIndex + 1) % images.length;
+    show();
+}
+
+function prev() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    show();
+}
+
+function closeLightbox() {
+    lightbox.classList.remove("active");
+}
+
+function goHome() {
+    window.location.href = "index.html";
+}
+
+/* SWIPE MOBILE */
+
+let startX = 0;
+
+lightbox.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
+
+lightbox.addEventListener("touchend", e => {
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) next();
+    if (endX - startX > 50) prev();
+});
+
+/* KEYBOARD */
+
+document.addEventListener("keydown", e => {
+    if (!lightbox.classList.contains("active")) return;
+
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
+    if (e.key === "Escape") closeLightbox();
+});
+
+/* CHARGEMENT JSON */
+
+fetch("images1.json")
+.then(res => res.json())
+.then(data => {
+
+    const list = data.quizz_niveau1.map(img => `quizz_niveau1/${img}`);
+    const gallery = document.getElementById("gallery");
+
+    data.quizz_niveau1.forEach((imgName, i) => {
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const src = `quizz_niveau1/${imgName}`;
+
+        card.innerHTML = `<img src="${src}" alt="">`;
+
+        card.addEventListener("click", () => open(list, i));
+
+        gallery.appendChild(card);
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
