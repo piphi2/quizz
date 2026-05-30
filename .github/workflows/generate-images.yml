@@ -36,7 +36,7 @@ jobs:
             git config user.email "github-actions@github.com"
         
             git add images.json
-            git add images1.json images2.json images3.json
+            git add images1.json images2.json images3.json images4.json
         
             git diff --cached --quiet || git commit -m "Mise à jour automatique images.json"
         
