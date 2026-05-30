@@ -15,6 +15,11 @@ const folders = [
     folder: "quizz_niveau3",
     output: "images3.json",
     key: "quizz_niveau3"
+  },
+  {
+    folder: "quizz_niveau4",
+    output: "images4.json",
+    key: "quizz_niveau4"
   }
 ];
 
