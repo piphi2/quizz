@@ -7,6 +7,7 @@ on:
       - 'quizz_niveau1/**'
       - 'quizz_niveau2/**'
       - 'quizz_niveau3/**'
+      - 'quizz_niveau4/**'
 
   workflow_dispatch:
 
