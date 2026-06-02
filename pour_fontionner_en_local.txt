@@ -1,0 +1,15 @@
+Pour faire fonctionner en local :
+
+❌ ce qui casse hors-ligne : fetch("images1.json")
+➡️ En local, ça ne marche pas si tu ouvres le fichier en file://
+👉 raison : les navigateurs bloquent fetch() sur fichiers locaux (CORS sécurité)
+
+
+✔️ SOLUTION POUR MODE HORS-LIGNE
+👉 lancer un petit serveur local
+
+avec Python (à lancer dans un terminal dans le dossier du quizz) :
+python -m http.server 8000
+
+➡️ ensuite :
+http://localhost:8000
