@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niveau 1</title>
+
+<style>
+
+/* ===== BASE ===== */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+
+
+/* INFO */
+
+.info {
+    margin-top: 15px;
+    text-align: left;
+    color: navy;
+}
+
+/* BOUTONS */
+
+.controls {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.nav {
+    background: white;
+}
+
+.home {
+    background: #ff4d4d;
+    color: white;
+	text-align: center;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Règles du quizz ciné-télé de Janette</h1>
+
+<div class="info">
+<pre>
+Il faut trouver des titres de films à partir d'une image tirée du film.
+Il y a 3 niveaux de difficulté. Il y a 20 titres à deviner par niveau.
+Certains titres apparaissent dans plusieurs niveaux de difficulté différents. 
+	 
+On doit commencer par essayer de remplir le niveau 3.
+Si on passe au niveau 2, on ne doit plus jamais remplir le niveau 3 (sinon, c'est tricher)
+Si on passe au niveau 1, on ne doit plus jamais remplir les niveaux 2 et 3 (sinon, c'est tricher).
+Il n'y a aucun contrôle par aucun arbitre. Tricher, c'est mal.
+
+Ce jeu est en temps libre : pas de chronomètre, chaque équipe joue quand elle veut. 
+Une fois qu'on ne trouve plus de titres, on rend la feuille à l'arbitre.
+
+Nombre de points par titre : 
+0,5 point par titre pour le niveau1	1 point par titre pour le niveau2	1,5 points par titre pour le niveau3
+
+Il y a un niveau bonus (avec 4 films) : 2 points par titre 
+
+</pre>
+        <div class="controls">
+            <button class="home" onclick="goHome()">Retour</button>
+        </div>
+
+</div>
+
+
+<script>
+
+function goHome() {
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>
